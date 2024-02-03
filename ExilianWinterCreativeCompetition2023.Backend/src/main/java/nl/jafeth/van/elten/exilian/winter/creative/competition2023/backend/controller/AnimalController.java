@@ -27,9 +27,17 @@ public class AnimalController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/animals", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Animal> findAllAnimals() {
+    public ResponseEntity<Object> findAllAnimals() {
+        ResponseEntity<Object> responseEntity;
         logger.info("Finding all animals");
-        return animalService.findAllAnimals();
+        try {
+            List<Animal> animals = animalService.findAllAnimals();
+            responseEntity = new ResponseEntity<>(animals, HttpStatus.OK);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return responseEntity;
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/animal/{id}")
@@ -37,19 +45,58 @@ public class AnimalController {
     public ResponseEntity<Object> findAnimal(@PathVariable(name = "id") int id) {
         ResponseEntity<Object> responseEntity;
         logger.info("Finding specific animal id: {}", id);
-        Animal animal = animalService.findAnimal(id);
-        responseEntity = new ResponseEntity<>(animal, HttpStatus.OK);
-        if (animal == null) {
-            responseEntity = new ResponseEntity<>(String.format("Animal with id %d not found", id), HttpStatus.NOT_FOUND);
+        try {
+            Animal animal = animalService.findAnimal(id);
+            responseEntity = new ResponseEntity<>(animal, HttpStatus.OK);
+            if (animal == null) {
+                responseEntity = new ResponseEntity<>(String.format("Animal with id %d not found", id), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
         return responseEntity;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/animal/add", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void addAnimal(@RequestBody Animal animal) {
+    public ResponseEntity<Object> addAnimal(@RequestBody Animal animal) {
+        ResponseEntity<Object> responseEntity;
         logger.info("Start adding new animal: {}", animal);
-        animalService.addAnimal(animal);
-        logger.info("Finished adding new animal: {}", animal);
+        try {
+            animalService.addAnimal(animal);
+            responseEntity = new ResponseEntity<>("Animal saved", HttpStatus.OK);
+            logger.info("Finished adding new animal: {}", animal);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/animal/update", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Object> updateAnimal(@RequestBody Animal animal) {
+        ResponseEntity<Object> responseEntity;
+        logger.info("Start updating animal: {}", animal);
+        try {
+            animalService.updateAnimal(animal);
+            responseEntity = new ResponseEntity<>("Animal updated", HttpStatus.OK);
+            logger.info("Finished updating animal: {}", animal);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/animal/delete", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Object> deleteAnimal(@RequestBody Animal animal) {
+        ResponseEntity<Object> responseEntity;
+        logger.info("Start deleting animal: {}", animal);
+        try {
+            animalService.deleteAnimal(animal);
+            responseEntity = new ResponseEntity<>("Animal deleted", HttpStatus.OK);
+            logger.info("Finished deleting animal: {}", animal);
+        } catch (Exception e) {
+            responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
+    }
 }

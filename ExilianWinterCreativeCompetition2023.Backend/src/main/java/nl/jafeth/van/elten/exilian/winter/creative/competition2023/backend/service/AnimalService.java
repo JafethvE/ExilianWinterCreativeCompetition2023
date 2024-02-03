@@ -36,4 +36,16 @@ public class AnimalService {
         animalRepository.save(animal);
         logger.info("Finished adding new animal: {}", animal);
     }
+
+    public void updateAnimal(Animal animal) {
+        logger.info("Start updating animal: {}", animal);
+        animalRepository.save(animal);
+        logger.info("Finished updating animal: {}", animal);
+    }
+
+    public void deleteAnimal(Animal animal) {
+        logger.info("Start deleting animal: {}", animal);
+        animalRepository.delete(animal);
+        logger.info("Finished deleting animal: {}", animal);
+    }
 }
