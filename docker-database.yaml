@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  animal-unit-test-postgresdb:
+    image: postgres:16.1
+    ports:
+      - "15432:5432"
+    networks:
+      - animal-test-net
+    container_name: animal-unit-test-postgresdb
+    command: postgres -N 500
+    environment:
+      - POSTGRES_USER=animalapplication
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=animalrdb
+
+volumes:
+  animal-unit-test-postgresdb: {}
+
+networks:
+  animal-test-net:
+    driver: "bridge"
