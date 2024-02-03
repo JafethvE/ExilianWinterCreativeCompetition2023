@@ -1,7 +1,7 @@
 package nl.jafeth.van.elten.exilian.winter.creative.competition2023.backend.service;
 
 import nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.db.entity.Animal;
-import nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.db.repository.AnimalRepository;
+import nl.jafeth.van.elten.exilian.winter.creative.competition2023.backend.repository.AnimalRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

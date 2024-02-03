@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EntityScan("nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.db.entity")
-@EnableJpaRepositories("nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.db.repository")
+@EnableJpaRepositories("nl.jafeth.van.elten.exilian.winter.creative.competition2023.backend.repository")
 @EnableAutoConfiguration
 public class AnimalBackendApplication {
     public static void main(String... args) {
