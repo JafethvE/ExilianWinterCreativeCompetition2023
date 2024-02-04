@@ -9,6 +9,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.Frontend/pom.xml" />
         <option value="$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.TestUtils/pom.xml" />
       </set>
     </option>
