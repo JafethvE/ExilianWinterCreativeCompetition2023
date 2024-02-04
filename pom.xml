@@ -12,7 +12,6 @@
     <modules>
         <module>ExilianWinterCreativeCompetition2023.Backend</module>
         <module>ExilianWinterCreativeCompetition2023.DTO</module>
-        <module>ExilianWinterCreativeCompetition2023.Frontend</module>
     </modules>
 
     <properties>
