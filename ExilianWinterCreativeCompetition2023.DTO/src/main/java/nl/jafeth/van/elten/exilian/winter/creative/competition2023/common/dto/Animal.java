@@ -1,4 +1,4 @@
-package nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.db.entity;
+package nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,8 +40,16 @@ public class Animal {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

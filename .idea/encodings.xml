@@ -3,10 +3,12 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.Backend/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.Backend/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.Common/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.Common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.DTO/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.DTO/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.Frontend/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.Frontend/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.TestUtils/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ExilianWinterCreativeCompetition2023.TestUtils/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>

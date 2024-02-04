@@ -1,6 +1,6 @@
 package nl.jafeth.van.elten.exilian.winter.creative.competition2023.backend.repository;
 
-import nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.db.entity.Animal;
+import nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
