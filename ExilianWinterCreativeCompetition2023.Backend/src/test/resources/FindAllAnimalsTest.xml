@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dataset>
     <animal
-        id="-1"
+        id="1"
         name="Test1"
         description="Test1"/>
     <animal
-        id="-2"
+        id="2"
         name="Test2"
         description="Test2"/>
 </dataset>

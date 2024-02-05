@@ -66,13 +66,13 @@ public class AnimalRepositoryTest {
     @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
     void findAnimalShouldReturn() {
-        Animal animal = animalRepository.findAnimal(-1);
+        Animal animal = animalRepository.findAnimal(1);
 
-        assertAnimal(-1, "Test1", "Test1", animal);
+        assertAnimal(1, "Test1", "Test1", animal);
 
-        animal = animalRepository.findAnimal(-2);
+        animal = animalRepository.findAnimal(2);
 
-        assertAnimal(-2, "Test2", "Test2", animal);
+        assertAnimal(2, "Test2", "Test2", animal);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class AnimalRepositoryTest {
                 ))
         ));
 
-        Animal animal = new Animal(-3, "Test3", "Test3");
+        Animal animal = new Animal(3, "Test3", "Test3");
         animalRepository.save(animal);
 
         animals = animalRepository.findAllAnimals();
@@ -135,7 +135,7 @@ public class AnimalRepositoryTest {
         Animal existingAnimal = new Animal();
 
         for (Animal animal : animals) {
-            if (animal.getId() == -2) {
+            if (animal.getId() == 2) {
                 existingAnimal = animal;
             }
         }
@@ -180,7 +180,7 @@ public class AnimalRepositoryTest {
         Animal existingAnimal = new Animal();
 
         for (Animal animal : animals) {
-            if (animal.getId() == -2) {
+            if (animal.getId() == 2) {
                 existingAnimal = animal;
             }
         }
