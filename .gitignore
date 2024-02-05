@@ -37,4 +37,4 @@ build/
 ### Mac OS ###
 .DS_Store
 /logs/
-/ExilianWinterCreativeCompetition2023.Backend/logs/spring-boot-logger.log
+/ExilianWinterCreativeCompetition2023.Backend/logs/
