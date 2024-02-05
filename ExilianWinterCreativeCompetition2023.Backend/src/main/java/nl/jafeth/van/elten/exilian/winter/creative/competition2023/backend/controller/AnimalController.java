@@ -41,6 +41,7 @@ public class AnimalController {
             List<Animal> animals = animalService.findAllAnimals();
             responseEntity = new ResponseEntity<>(animals, HttpStatus.OK);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -64,6 +65,7 @@ public class AnimalController {
                 responseEntity = new ResponseEntity<>(String.format("Animal with id %d not found", id), HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
+            logger.error(e.getMessage());
             responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -84,6 +86,7 @@ public class AnimalController {
             responseEntity = new ResponseEntity<>("Animal saved", HttpStatus.OK);
             logger.info("Finished adding new animal: {}", animal);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
@@ -103,6 +106,7 @@ public class AnimalController {
             responseEntity = new ResponseEntity<>("Animal updated", HttpStatus.OK);
             logger.info("Finished updating animal: {}", animal);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
@@ -122,6 +126,7 @@ public class AnimalController {
             responseEntity = new ResponseEntity<>("Animal deleted", HttpStatus.OK);
             logger.info("Finished deleting animal: {}", animal);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;

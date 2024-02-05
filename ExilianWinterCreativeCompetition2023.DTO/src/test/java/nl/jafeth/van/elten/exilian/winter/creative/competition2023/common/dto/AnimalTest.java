@@ -10,7 +10,7 @@ public class AnimalTest {
     @Test
     void defaultConstructorShouldReturn() {
         Animal animal = new Animal();
-        assertEquals(0, animal.getId());
+        assertNull(animal.getId());
         assertNull(animal.getName());
         assertNull(animal.getDescription());
     }
@@ -27,7 +27,7 @@ public class AnimalTest {
     @Test
     void getIdShouldReturn() {
         Animal animal = new Animal();
-        assertEquals(0, animal.getId());
+        assertNull(animal.getId());
 
         animal = new Animal(1, "Test1", "Test1");
         assertEquals(1, animal.getId());
@@ -87,7 +87,7 @@ public class AnimalTest {
     @Test
     void toStringShouldReturn() {
         Animal animal = new Animal();
-        assertEquals(String.format("Id: %s\nName: %s\nDescription: %s", "0", "null", "null"), animal.toString());
+        assertEquals(String.format("Id: %s\nName: %s\nDescription: %s", "null", "null", "null"), animal.toString());
 
         animal = new Animal(1, "Test1", "Test1");
         assertEquals(String.format("Id: %s\nName: %s\nDescription: %s", "1", "Test1", "Test1"), animal.toString());
@@ -96,7 +96,7 @@ public class AnimalTest {
         assertEquals(String.format("Id: %s\nName: %s\nDescription: %s", "2", "Test2", "Test2"), animal.toString());
     }
 
-    void assertAnimal(int id, String name, String description, Animal animal) {
+    void assertAnimal(Integer id, String name, String description, Animal animal) {
         assertEquals(id, animal.getId());
         assertEquals(name, animal.getName());
         assertEquals(description, animal.getDescription());

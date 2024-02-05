@@ -425,7 +425,7 @@ public class AnimalControllerTest {
         ));
     }
 
-    void assertAnimal(int id, String name, String description, Animal animal) {
+    void assertAnimal(Integer id, String name, String description, Animal animal) {
         assertEquals(id, animal.getId());
         assertEquals(name, animal.getName());
         assertEquals(description, animal.getDescription());

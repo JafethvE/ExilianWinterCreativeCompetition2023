@@ -7,10 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -23,10 +23,9 @@ public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    @NotNull
     @Max(value = Integer.MAX_VALUE, message = "ID must fit in an integer")
-    @Positive
-    private int id;
+    @Min(value = 0, message = "ID must start at 0")
+    private Integer id;
 
     @Column
     @NotBlank(message = "Animal can't have an empty name")
@@ -55,7 +54,7 @@ public class Animal {
      * @param name The name of this animal.
      * @param description The description of this animal.
      */
-    public Animal(int id, String name, String description) {
+    public Animal(Integer id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -65,7 +64,7 @@ public class Animal {
      * Returns the ID of this animal.
      * @return The ID of this animal.
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

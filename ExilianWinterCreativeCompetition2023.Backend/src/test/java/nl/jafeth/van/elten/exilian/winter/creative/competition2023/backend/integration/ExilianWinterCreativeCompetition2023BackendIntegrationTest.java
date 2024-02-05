@@ -116,7 +116,7 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
                 ))
         ));
 
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(3, "Test3", "Test3"), String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(null, "Test3", "Test3"), String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
@@ -304,7 +304,7 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
         ));
     }
 
-    void assertAnimal(int id, String name, String description, Animal animal) {
+    void assertAnimal(Integer id, String name, String description, Animal animal) {
         assertEquals(id, animal.getId());
         assertEquals(name, animal.getName());
         assertEquals(description, animal.getDescription());

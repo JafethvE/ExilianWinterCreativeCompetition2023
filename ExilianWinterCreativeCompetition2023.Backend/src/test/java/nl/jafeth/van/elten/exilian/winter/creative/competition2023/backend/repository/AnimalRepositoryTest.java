@@ -96,7 +96,7 @@ public class AnimalRepositoryTest {
                 ))
         ));
 
-        Animal animal = new Animal(3, "Test3", "Test3");
+        Animal animal = new Animal(null, "Test3", "Test3");
         animalRepository.save(animal);
 
         animals = animalRepository.findAllAnimals();
@@ -283,7 +283,7 @@ public class AnimalRepositoryTest {
         ));
     }
 
-    void assertAnimal(int id, String name, String description, Animal animal) {
+    void assertAnimal(Integer id, String name, String description, Animal animal) {
         assertEquals(id, animal.getId());
         assertEquals(name, animal.getName());
         assertEquals(description, animal.getDescription());
