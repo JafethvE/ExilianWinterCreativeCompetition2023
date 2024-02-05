@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  exilian-winter-creative-competition-2023-postgresdb:
+    image: postgres:16.1
+    ports:
+      - "15432:5432"
+    networks:
+      - exilian-winter-creative-competition-2023-net
+    container_name: exilian-winter-creative-competition-2023-postgresdb
+    command: postgres -N 500
+    environment:
+      - POSTGRES_USER=animalapplication
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=animalrdb
+
+  exilian-winter-creative-competition-2023-backend:
+    build:
+      context: ExilianWinterCreativeCompetition2023.Backend
+      dockerfile: docker/app/Dockerfile
+    image: exilian-winter-creative-competition-2023-backend
+    container_name: exilian-winter-creative-competition-2023-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - exilian-winter-creative-competition-2023-net
+    depends_on:
+      - exilian-winter-creative-competition-2023-postgresdb
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://exilian-winter-creative-competition-2023-postgresdb:5432/animalrdb
+
+volumes:
+  exilian-winter-creative-competition-2023-postgresdb: {}
+
+networks:
+  exilian-winter-creative-competition-2023-net:
+    driver: "bridge"
