@@ -52,15 +52,155 @@ public class AnimalRepositoryTest {
         assertEquals(2, animals.size());
         assertThat(animals, allOf(
                 hasItem(allOf(
-                        hasProperty("id", is(-1)),
                         hasProperty("name", is("Test1")),
                         hasProperty("description", is("Test1"))
                 )),
                 hasItem(allOf(
-                        hasProperty("id", is(-2)),
                         hasProperty("name", is("Test2")),
                         hasProperty("description", is("Test2"))
                 ))
         ));
+    }
+
+    @Test
+    @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
+    void findAnimalShouldReturn() {
+        Animal animal = animalRepository.findAnimal(-1);
+
+        assertAnimal(-1, "Test1", "Test1", animal);
+
+        animal = animalRepository.findAnimal(-2);
+
+        assertAnimal(-2, "Test2", "Test2", animal);
+    }
+
+    @Test
+    @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
+    void saveNewShouldSave() {
+        List<Animal> animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                ))
+        ));
+
+        Animal animal = new Animal(-3, "Test3", "Test3");
+        animalRepository.save(animal);
+
+        animals = animalRepository.findAllAnimals();
+
+        assertEquals(3, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test3")),
+                        hasProperty("description", is("Test3"))
+                ))
+        ));
+    }
+
+    @Test
+    @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
+    void saveExistingShouldSave() {
+        List<Animal> animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                ))
+        ));
+        Animal existingAnimal = new Animal();
+
+        for (Animal animal : animals) {
+            if (animal.getId() == -2) {
+                existingAnimal = animal;
+            }
+        }
+
+        existingAnimal.setName("Test3");
+        existingAnimal.setDescription("Test3");
+
+        animalRepository.save(existingAnimal);
+
+        animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test3")),
+                        hasProperty("description", is("Test3"))
+                ))
+        ));
+    }
+
+    @Test
+    @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
+    void deleteShouldDelete() {
+        List<Animal> animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                ))
+        ));
+        Animal existingAnimal = new Animal();
+
+        for (Animal animal : animals) {
+            if (animal.getId() == -2) {
+                existingAnimal = animal;
+            }
+        }
+
+        animalRepository.delete(existingAnimal);
+
+        animals = animalRepository.findAllAnimals();
+
+        assertEquals(1, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                ))
+        ));
+    }
+
+    void assertAnimal(int id, String name, String description, Animal animal) {
+        assertEquals(id, animal.getId());
+        assertEquals(name, animal.getName());
+        assertEquals(description, animal.getDescription());
     }
 }
