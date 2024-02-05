@@ -4,6 +4,7 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+import jakarta.validation.ConstraintViolationException;
 import nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.TransactionSystemException;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @EnableAutoConfiguration
@@ -78,7 +81,7 @@ public class AnimalRepositoryTest {
     @Test
     @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
-    void saveNewShouldSave() {
+    void saveNewWithCorrectDataShouldSave() {
         List<Animal> animals = animalRepository.findAllAnimals();
 
         assertEquals(2, animals.size());
@@ -118,7 +121,43 @@ public class AnimalRepositoryTest {
     @Test
     @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
-    void saveExistingShouldSave() {
+    void saveNewWithIncorrectDataShouldNotSave() {
+        List<Animal> animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                ))
+        ));
+
+        Animal animal = new Animal(3, ",", "Test3");
+        assertThrows(ConstraintViolationException.class, () -> animalRepository.save(animal));
+
+        animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                ))
+        ));
+    }
+
+    @Test
+    @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
+    void saveExistingWithCorrectDataShouldSave() {
         List<Animal> animals = animalRepository.findAllAnimals();
 
         assertEquals(2, animals.size());
@@ -156,6 +195,52 @@ public class AnimalRepositoryTest {
                 hasItem(allOf(
                         hasProperty("name", is("Test3")),
                         hasProperty("description", is("Test3"))
+                ))
+        ));
+    }
+
+    @Test
+    @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
+    void saveExistingWithIncorrectDataShouldNotSave() {
+        List<Animal> animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                ))
+        ));
+        Animal existingAnimal = new Animal();
+
+        for (Animal animal : animals) {
+            if (animal.getId() == 2) {
+                existingAnimal = animal;
+            }
+        }
+
+        existingAnimal.setName("Test3");
+        existingAnimal.setDescription(",");
+
+        Animal finalExistingAnimal = existingAnimal;
+        assertThrows(TransactionSystemException.class, () -> animalRepository.save(finalExistingAnimal));
+
+        animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
                 ))
         ));
     }

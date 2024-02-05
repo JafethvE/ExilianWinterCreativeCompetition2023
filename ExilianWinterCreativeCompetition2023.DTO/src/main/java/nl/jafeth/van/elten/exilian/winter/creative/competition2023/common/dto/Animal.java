@@ -1,12 +1,21 @@
 package nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
+/**
+ * Entity definition for the Animal entity.
+ */
 @Entity
 @Table
 public class Animal {
@@ -14,28 +23,56 @@ public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
+    @NotNull
+    @Max(value = Integer.MAX_VALUE, message = "ID must fit in an integer")
+    @Positive
     private int id;
 
     @Column
+    @NotBlank(message = "Animal can't have an empty name")
+    @NotNull(message = "Animal must have a name")
+    @Pattern(regexp = "[a-zA-Z0-9 ]*", message = "Name can only have letters, numbers, and spaces")
+    @Size(max = 255, message = "Name cannot be longer than 255 characters")
     private String name;
 
     @Column
+    @NotBlank(message = "Animal can't have an empty description")
+    @NotNull(message = "Animal must have a description")
+    @Pattern(regexp = "[a-zA-Z0-9 .]*", message = "Name can only have letters, spaces, numbers, comma's, and periods")
+    @Size(max = 255, message = "Description cannot be longer than 255 characters")
     private String description;
 
+    /**
+     * Default constructor.
+     */
     public Animal() {
 
     }
 
+    /**
+     * Overloaded constructor.
+     * @param id The database ID for this animal.
+     * @param name The name of this animal.
+     * @param description The description of this animal.
+     */
     public Animal(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
 
+    /**
+     * Returns the ID of this animal.
+     * @return The ID of this animal.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Returns the name of this animal.
+     * @return The name of this animal.
+     */
     public String getName() {
         return name;
     }
@@ -44,6 +81,10 @@ public class Animal {
         this.name = name;
     }
 
+    /**
+     * Returns the description of this animal.
+     * @return The description of this animal.
+     */
     public String getDescription() {
         return description;
     }

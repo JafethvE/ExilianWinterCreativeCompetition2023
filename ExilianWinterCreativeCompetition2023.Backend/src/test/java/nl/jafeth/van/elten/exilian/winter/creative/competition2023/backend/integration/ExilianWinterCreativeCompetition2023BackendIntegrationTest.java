@@ -101,7 +101,7 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
     @Test
     @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
-    void addAnimalShouldReturn() {
+    void addAnimalWithCorrectDataShouldReturn() {
         List<Animal> animals = animalRepository.findAllAnimals();
 
         assertEquals(2, animals.size());
@@ -144,7 +144,46 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
     @Test
     @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
-    void updateAnimalShouldReturn() {
+    void addAnimalWithIncorrectDataShouldReturn() {
+        List<Animal> animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                ))
+        ));
+
+        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(3, ",", "Test3"), String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Internal server error", response.getBody());
+
+        animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                ))
+        ));
+    }
+
+    @Test
+    @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
+    void updateAnimalWithCorrectDataShouldReturn() {
         List<Animal> animals = animalRepository.findAllAnimals();
 
         assertEquals(2, animals.size());
@@ -180,6 +219,49 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
                 hasItem(allOf(
                         hasProperty("name", is("Test3")),
                         hasProperty("description", is("Test3"))
+                ))
+        ));
+    }
+
+    @Test
+    @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
+    void updateAnimalWithIncorrectDataShouldReturn() {
+        List<Animal> animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                ))
+        ));
+
+        Animal animal = animalRepository.findAnimal(2);
+        animal.setName("Test3");
+        animal.setDescription(",");
+
+        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/animal/update", animal, String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Internal server error", response.getBody());
+
+        animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
                 ))
         ));
     }

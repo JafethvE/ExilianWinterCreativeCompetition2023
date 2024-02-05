@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * The Rest Controller for this application.
+ */
 @RestController
 public class AnimalController {
 
@@ -25,6 +28,10 @@ public class AnimalController {
     @Autowired
     private AnimalService animalService;
 
+    /**
+     * Finds all animals currently in the database or gives an error if there is a problem.
+     * @return An HTTP response containing the list of animals currently in the database or an error.
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/animals", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Object> findAllAnimals() {
@@ -40,7 +47,12 @@ public class AnimalController {
         return responseEntity;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/animal/{id}")
+    /**
+     * Finds all data on a specific animal or gives an error if there is a problem.
+     * @param id The id of the animal requested.
+     * @return An HTTP response containing the data of the animal requested or an error.
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/animal/{id:[0-9]*}")
     @ResponseBody
     public ResponseEntity<Object> findAnimal(@PathVariable(name = "id") int id) {
         ResponseEntity<Object> responseEntity;
@@ -58,6 +70,11 @@ public class AnimalController {
         return responseEntity;
     }
 
+    /**
+     * Creates a new animal in the database or gives an error if there is a problem.
+     * @param animal The animal to be saved.
+     * @return An HTTP response with an OK or an error.
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/animal/add", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> addAnimal(@RequestBody Animal animal) {
         ResponseEntity<Object> responseEntity;
@@ -72,6 +89,11 @@ public class AnimalController {
         return responseEntity;
     }
 
+    /**
+     * Updates an existing animal in the database or gives an error if there is a problem.
+     * @param animal The animal to be saved.
+     * @return An HTTP response with an OK or an error.
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/animal/update", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> updateAnimal(@RequestBody Animal animal) {
         ResponseEntity<Object> responseEntity;
@@ -86,6 +108,11 @@ public class AnimalController {
         return responseEntity;
     }
 
+    /**
+     * Deletes an existing animal from the database or gives an error if there is a problem.
+     * @param animal The animal to be deleted.
+     * @return An HTTP response with an OK or an error.
+     */
     @RequestMapping(method = RequestMethod.DELETE, value = "/animal/delete", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> deleteAnimal(@RequestBody Animal animal) {
         ResponseEntity<Object> responseEntity;
