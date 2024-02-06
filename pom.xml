@@ -77,6 +77,11 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>nl/jafeth/van/elten/exilian/winter/creative/competition2023/backend/AnimalBackendApplication.class</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
