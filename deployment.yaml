@@ -14,10 +14,7 @@ services:
       - POSTGRES_DB=animalrdb
 
   exilian-winter-creative-competition-2023-backend:
-    build:
-      context: ExilianWinterCreativeCompetition2023.Backend
-      dockerfile: docker/app/Dockerfile
-    image: exilian-winter-creative-competition-2023-backend
+    image: jafethve/exilianwintercreativecompetition2023backend:1.0
     container_name: exilian-winter-creative-competition-2023-backend
     ports:
       - "8080:8080"
