@@ -30,14 +30,14 @@ public class Animal {
     @Column
     @NotBlank(message = "Animal can't have an empty name")
     @NotNull(message = "Animal must have a name")
-    @Pattern(regexp = "^[a-zA-Z0-9\\s]{1,255}$", message = "Name can only have letters, numbers, and spaces")
+    @Pattern(regexp = "^[a-zA-Z0-9\\s]*$", message = "Name can only have letters, numbers, and spaces")
     @Size(max = 255, message = "Name cannot be longer than 255 characters")
     private String name;
 
     @Column
     @NotBlank(message = "Animal can't have an empty description")
     @NotNull(message = "Animal must have a description")
-    @Pattern(regexp = "^[a-zA-Z0-9\\s]{1,255}$", message = "Description contains illegal characters")
+    @Pattern(regexp = "^[a-zA-Z0-9\\s.,:'$&()!]*$", message = "Description contains illegal characters")
     @Size(max = 255, message = "Description cannot be longer than 255 characters")
     private String description;
 

@@ -52,6 +52,8 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
     @Autowired
     private AnimalRepository animalRepository;
 
+    private static final String TOO_LONG_STRING = "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum";
+
     @Test
     @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
@@ -116,7 +118,7 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
                 ))
         ));
 
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(null, "Test3", "Test3"), String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(3, "Test3", "Test3"), String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
@@ -159,13 +161,72 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
                 ))
         ));
 
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(3, ",", "Test3"), String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(3, "@", "Test3"), String.class);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
         assertEquals("Validation failed for classes [nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal] during persist time for groups [jakarta.validation.groups.Default, ]\n" +
                 "List of constraint violations:[\n" +
                 "\tConstraintViolationImpl{interpolatedMessage='Name can only have letters, numbers, and spaces', propertyPath=name, rootBeanClass=class nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal, messageTemplate='Name can only have letters, numbers, and spaces'}\n" +
+                "]", response.getBody());
+
+        response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(3, "", "Test3"), String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Validation failed for classes [nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal] during persist time for groups [jakarta.validation.groups.Default, ]\n" +
+                "List of constraint violations:[\n" +
+                "\tConstraintViolationImpl{interpolatedMessage='Animal can't have an empty name', propertyPath=name, rootBeanClass=class nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal, messageTemplate='Animal can't have an empty name'}\n" +
+                "]", response.getBody());
+
+        response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(3, TOO_LONG_STRING, "Test3"), String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Validation failed for classes [nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal] during persist time for groups [jakarta.validation.groups.Default, ]\n" +
+                "List of constraint violations:[\n" +
+                "\tConstraintViolationImpl{interpolatedMessage='Name cannot be longer than 255 characters', propertyPath=name, rootBeanClass=class nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal, messageTemplate='Name cannot be longer than 255 characters'}\n" +
+                "]", response.getBody());
+
+        animals = animalRepository.findAllAnimals();
+
+        assertEquals(2, animals.size());
+        assertThat(animals, allOf(
+                hasItem(allOf(
+                        hasProperty("name", is("Test1")),
+                        hasProperty("description", is("Test1"))
+                )),
+                hasItem(allOf(
+                        hasProperty("name", is("Test2")),
+                        hasProperty("description", is("Test2"))
+                ))
+        ));
+
+        response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(3, "Test3", "@"), String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Validation failed for classes [nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal] during persist time for groups [jakarta.validation.groups.Default, ]\n" +
+                "List of constraint violations:[\n" +
+                "\tConstraintViolationImpl{interpolatedMessage='Description contains illegal characters', propertyPath=description, rootBeanClass=class nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal, messageTemplate='Description contains illegal characters'}\n" +
+                "]", response.getBody());
+
+        response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(3, "Test3", ""), String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Validation failed for classes [nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal] during persist time for groups [jakarta.validation.groups.Default, ]\n" +
+                "List of constraint violations:[\n" +
+                "\tConstraintViolationImpl{interpolatedMessage='Animal can't have an empty description', propertyPath=description, rootBeanClass=class nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal, messageTemplate='Animal can't have an empty description'}\n" +
+                "]", response.getBody());
+
+        response = restTemplate.postForEntity("http://localhost:" + port + "/animal/add", new Animal(3, "Test3", TOO_LONG_STRING), String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Validation failed for classes [nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal] during persist time for groups [jakarta.validation.groups.Default, ]\n" +
+                "List of constraint violations:[\n" +
+                "\tConstraintViolationImpl{interpolatedMessage='Description cannot be longer than 255 characters', propertyPath=description, rootBeanClass=class nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal, messageTemplate='Description cannot be longer than 255 characters'}\n" +
                 "]", response.getBody());
 
         animals = animalRepository.findAllAnimals();
@@ -245,10 +306,55 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
         ));
 
         Animal animal = animalRepository.findAnimal(2);
-        animal.setName("Test3");
-        animal.setDescription("$");
+        animal.setName("@");
+        animal.setDescription("Test3");
 
         ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/animal/update", animal, String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Could not commit JPA transaction", response.getBody());
+
+        animal.setName("");
+        animal.setDescription("Test3");
+
+        response = restTemplate.postForEntity("http://localhost:" + port + "/animal/update", animal, String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Could not commit JPA transaction", response.getBody());
+
+        animal.setName(TOO_LONG_STRING);
+        animal.setDescription("Test3");
+
+        response = restTemplate.postForEntity("http://localhost:" + port + "/animal/update", animal, String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Could not commit JPA transaction", response.getBody());
+
+        animal.setName("Test3");
+        animal.setDescription("@");
+
+        response = restTemplate.postForEntity("http://localhost:" + port + "/animal/update", animal, String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Could not commit JPA transaction", response.getBody());
+
+        animal.setName("Test3");
+        animal.setDescription("");
+
+        response = restTemplate.postForEntity("http://localhost:" + port + "/animal/update", animal, String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertEquals("Could not commit JPA transaction", response.getBody());
+
+        animal.setName("Test3");
+        animal.setDescription(TOO_LONG_STRING);
+
+        response = restTemplate.postForEntity("http://localhost:" + port + "/animal/update", animal, String.class);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());

@@ -46,6 +46,8 @@ public class AnimalRepositoryTest {
     @Autowired
     private AnimalRepository animalRepository;
 
+    private static final String TOO_LONG_STRING = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
+
     @Test
     @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
@@ -96,7 +98,7 @@ public class AnimalRepositoryTest {
                 ))
         ));
 
-        Animal animal = new Animal(null, "Test3", "Test3");
+        Animal animal = new Animal(3, "Test3", "Test3");
         animalRepository.save(animal);
 
         animals = animalRepository.findAllAnimals();
@@ -136,8 +138,23 @@ public class AnimalRepositoryTest {
                 ))
         ));
 
-        Animal animal = new Animal(3, ",", "Test3");
+        Animal animal = new Animal(3, "@", "Test3");
         assertThrows(ConstraintViolationException.class, () -> animalRepository.save(animal));
+
+        Animal animal1 = new Animal(3, "", "Test3");
+        assertThrows(ConstraintViolationException.class, () -> animalRepository.save(animal1));
+
+        Animal animal2 = new Animal(3, TOO_LONG_STRING, "Test3");
+        assertThrows(ConstraintViolationException.class, () -> animalRepository.save(animal2));
+
+        Animal animal3 = new Animal(3, "Test3", "@");
+        assertThrows(ConstraintViolationException.class, () -> animalRepository.save(animal3));
+
+        Animal animal4 = new Animal(3, "Test3", "");
+        assertThrows(ConstraintViolationException.class, () -> animalRepository.save(animal4));
+
+        Animal animal5 = new Animal(3, "Test3", TOO_LONG_STRING);
+        assertThrows(ConstraintViolationException.class, () -> animalRepository.save(animal5));
 
         animals = animalRepository.findAllAnimals();
 
@@ -224,11 +241,41 @@ public class AnimalRepositoryTest {
             }
         }
 
-        existingAnimal.setName("Test3");
-        existingAnimal.setDescription("$");
+        existingAnimal.setName("@");
+        existingAnimal.setDescription("Test3");
 
         Animal finalExistingAnimal = existingAnimal;
         assertThrows(TransactionSystemException.class, () -> animalRepository.save(finalExistingAnimal));
+
+        existingAnimal.setName("");
+        existingAnimal.setDescription("Test3");
+
+        Animal finalExistingAnimal1 = existingAnimal;
+        assertThrows(TransactionSystemException.class, () -> animalRepository.save(finalExistingAnimal1));
+
+        existingAnimal.setName(TOO_LONG_STRING);
+        existingAnimal.setDescription("Test3");
+
+        Animal finalExistingAnimal2 = existingAnimal;
+        assertThrows(TransactionSystemException.class, () -> animalRepository.save(finalExistingAnimal2));
+
+        existingAnimal.setName("Test3");
+        existingAnimal.setDescription("@");
+
+        Animal finalExistingAnimal3 = existingAnimal;
+        assertThrows(TransactionSystemException.class, () -> animalRepository.save(finalExistingAnimal3));
+
+        existingAnimal.setName("Test3");
+        existingAnimal.setDescription("");
+
+        Animal finalExistingAnimal4 = existingAnimal;
+        assertThrows(TransactionSystemException.class, () -> animalRepository.save(finalExistingAnimal4));
+
+        existingAnimal.setName("Test3");
+        existingAnimal.setDescription(TOO_LONG_STRING);
+
+        Animal finalExistingAnimal5 = existingAnimal;
+        assertThrows(TransactionSystemException.class, () -> animalRepository.save(finalExistingAnimal5));
 
         animals = animalRepository.findAllAnimals();
 
