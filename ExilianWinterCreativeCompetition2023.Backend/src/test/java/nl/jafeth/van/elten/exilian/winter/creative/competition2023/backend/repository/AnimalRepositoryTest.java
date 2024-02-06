@@ -225,7 +225,7 @@ public class AnimalRepositoryTest {
         }
 
         existingAnimal.setName("Test3");
-        existingAnimal.setDescription(",");
+        existingAnimal.setDescription("$");
 
         Animal finalExistingAnimal = existingAnimal;
         assertThrows(TransactionSystemException.class, () -> animalRepository.save(finalExistingAnimal));

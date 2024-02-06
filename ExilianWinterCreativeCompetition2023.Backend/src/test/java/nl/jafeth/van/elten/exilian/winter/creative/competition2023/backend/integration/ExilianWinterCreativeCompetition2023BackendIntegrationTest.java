@@ -163,7 +163,10 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Validation failed for classes [nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal] during persist time for groups [jakarta.validation.groups.Default, ]\n" +
+                "List of constraint violations:[\n" +
+                "\tConstraintViolationImpl{interpolatedMessage='Name can only have letters, numbers, and spaces', propertyPath=name, rootBeanClass=class nl.jafeth.van.elten.exilian.winter.creative.competition2023.common.dto.Animal, messageTemplate='Name can only have letters, numbers, and spaces'}\n" +
+                "]", response.getBody());
 
         animals = animalRepository.findAllAnimals();
 
@@ -243,13 +246,13 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
 
         Animal animal = animalRepository.findAnimal(2);
         animal.setName("Test3");
-        animal.setDescription(",");
+        animal.setDescription("$");
 
         ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/animal/update", animal, String.class);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Could not commit JPA transaction", response.getBody());
 
         animals = animalRepository.findAllAnimals();
 

@@ -42,7 +42,7 @@ public class AnimalController {
             responseEntity = new ResponseEntity<>(animals, HttpStatus.OK);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return responseEntity;
@@ -66,7 +66,7 @@ public class AnimalController {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return responseEntity;
@@ -87,7 +87,7 @@ public class AnimalController {
             logger.info("Finished adding new animal: {}", animal);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
     }
@@ -107,7 +107,7 @@ public class AnimalController {
             logger.info("Finished updating animal: {}", animal);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
     }
@@ -127,7 +127,7 @@ public class AnimalController {
             logger.info("Finished deleting animal: {}", animal);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            responseEntity = new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
     }

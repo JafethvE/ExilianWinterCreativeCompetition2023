@@ -59,7 +59,7 @@ public class AnimalControllerTest {
     }
 
     void setupExceptionForFindAllAnimals() {
-        when(animalService.findAllAnimals()).thenThrow(new RuntimeException());
+        when(animalService.findAllAnimals()).thenThrow(new RuntimeException("Exception!"));
     }
 
     void setupCorrectDataForFindAnimal() {
@@ -75,19 +75,19 @@ public class AnimalControllerTest {
     }
 
     void setupExceptionForFindAnimal() {
-        when(animalService.findAnimal(anyInt())).thenThrow(new RuntimeException());
+        when(animalService.findAnimal(anyInt())).thenThrow(new RuntimeException("Exception!"));
     }
 
     void setupExceptionForAddAnimal() {
-        doThrow(new RuntimeException()).when(animalService).addAnimal(any(Animal.class));
+        doThrow(new RuntimeException("Exception!")).when(animalService).addAnimal(any(Animal.class));
     }
 
     void setupExceptionForUpdateAnimal() {
-        doThrow(new RuntimeException()).when(animalService).updateAnimal(any(Animal.class));
+        doThrow(new RuntimeException("Exception!")).when(animalService).updateAnimal(any(Animal.class));
     }
 
     void setupExceptionForDeleteAnimal() {
-        doThrow(new RuntimeException()).when(animalService).deleteAnimal(any(Animal.class));
+        doThrow(new RuntimeException("Exception!")).when(animalService).deleteAnimal(any(Animal.class));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class AnimalControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Exception!", response.getBody());
     }
 
     @Test
@@ -204,7 +204,7 @@ public class AnimalControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Exception!", response.getBody());
 
         response = animalController.findAnimal(2);
 
@@ -212,7 +212,7 @@ public class AnimalControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Exception!", response.getBody());
     }
 
     @Test
@@ -261,7 +261,7 @@ public class AnimalControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Exception!", response.getBody());
 
         response = animalController.addAnimal(animal2);
 
@@ -269,7 +269,7 @@ public class AnimalControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Exception!", response.getBody());
 
         assertThat(argumentCaptor.getAllValues(), allOf(
                 hasItem(allOf(
@@ -331,7 +331,7 @@ public class AnimalControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Exception!", response.getBody());
 
         response = animalController.updateAnimal(animal2);
 
@@ -339,7 +339,7 @@ public class AnimalControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Exception!", response.getBody());
 
         assertThat(argumentCaptor.getAllValues(), allOf(
                 hasItem(allOf(
@@ -401,7 +401,7 @@ public class AnimalControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Exception!", response.getBody());
 
         response = animalController.deleteAnimal(animal2);
 
@@ -409,7 +409,7 @@ public class AnimalControllerTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertInstanceOf(String.class, response.getBody());
-        assertEquals("Internal server error", response.getBody());
+        assertEquals("Exception!", response.getBody());
 
         assertThat(argumentCaptor.getAllValues(), allOf(
                 hasItem(allOf(
