@@ -27,6 +27,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
@@ -81,7 +82,7 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
     @Test
     @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
     @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
-    void findAnimalShouldReturn() {
+    void findAnimalWithCorrectDataShouldReturn() {
         ResponseEntity<Animal> response = restTemplate.getForEntity("http://localhost:" + port + "/animal/1", Animal.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -98,6 +99,23 @@ public class ExilianWinterCreativeCompetition2023BackendIntegrationTest {
         animal = response.getBody();
 
         assertAnimal(2, "Test2", "Test2", animal);
+    }
+
+    @Test
+    @DatabaseSetup(value = "/FindAllAnimalsTest.xml", type = DatabaseOperation.CLEAN_INSERT)
+    @DatabaseTearDown(value = "/EmptyAllTables.xml", type = DatabaseOperation.DELETE_ALL)
+    void findAnimalWithIncorrectDataShouldReturn() {
+        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/animal/@", String.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertThat( response.getBody(), containsString(",\"status\":404,\"error\":\"Not Found\",\"path\":\"/animal/@\""));
+
+        response = restTemplate.getForEntity("http://localhost:" + port + "/animal/T", String.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertInstanceOf(String.class, response.getBody());
+        assertThat( response.getBody(), containsString(",\"status\":404,\"error\":\"Not Found\",\"path\":\"/animal/T\""));
     }
 
     @Test
