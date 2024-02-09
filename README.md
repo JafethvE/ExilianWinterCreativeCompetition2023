@@ -1,8 +1,8 @@
 # The Hibernation database
 
 ## What it is
-This is a Java Spring Boot application that offers a simple REST interface to a relational database containing 
-a table of animals that hibernate. The REST interface can be used to create new animal entries, and modify or delete existing ones.
+This is a Java application that offers a simple interface to a database containing a table of animals that hibernate.
+It can be called to create new animal entries, and modify or delete existing ones.
 
 ## How it works
 The application uses the Spring Boot framework to provide REST functionality as well as database connectivity.
@@ -14,8 +14,10 @@ It connects to a PostgreSQL database which can be hosted anywhere but is most ea
 (See the deployment.yaml file for an example).
 
 ## Running it locally
-For the duration of the contest I'll host the backend myself.
-If you wish to run it yourself you need to download and install Docker Desktop [from here](https://www.docker.com/products/docker-desktop).
+For the duration of the contest I'll host the backend myself. You do not need to run this software manually to experience it working.
+You only need to run the [provided frontend](https://github.com/JafethvE/ExilianWinterCreativeCompetition2023.Frontend).
+
+If you do wish to run it yourself you need to download and install Docker Desktop [from here](https://www.docker.com/products/docker-desktop).
 
 Download this repository, either through the github web interface or by cloning it with Git.
 Once it is installed and running you can open a terminal.
